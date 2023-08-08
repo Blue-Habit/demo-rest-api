@@ -34,8 +34,6 @@ public class RoleController {
     @Autowired
     private RoleServiceAbstract roleService;
 
-
-
     @GetMapping(
         path = "/api/v1/role/permission",
         produces = MediaType.APPLICATION_JSON_VALUE
@@ -67,7 +65,7 @@ public class RoleController {
     )
     public ResponseEntity<BaseResponse<Role>> updateRole(
         @PathVariable("roleId") String roleId,
-         @RequestBody CreateRoleRequest request
+        @RequestBody CreateRoleRequest request
     ) {
         return roleService.updateNewRole(roleId, request);
     }
@@ -78,7 +76,7 @@ public class RoleController {
         consumes = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<BaseResponse<Role>> createNewRole(
-         @RequestBody CreateRoleRequest request
+        @RequestBody CreateRoleRequest request
     ) {
         return roleService.createNewRole(request);
     }
@@ -100,7 +98,7 @@ public class RoleController {
         consumes = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<BaseResponse<List<String>>> deleteRoles(
-         @RequestBody DeleteRolesRequest request
+        @RequestBody DeleteRolesRequest request
     ) {
         return roleService.deleteRoles(request);
     }
