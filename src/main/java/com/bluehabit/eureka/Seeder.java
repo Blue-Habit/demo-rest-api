@@ -7,6 +7,7 @@
 
 package com.bluehabit.eureka;
 
+import com.bluehabit.eureka.component.user.UserCredential;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 public class Seeder implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        //no empty
+        final UserCredential user = new UserCredential();
+
     }
 }

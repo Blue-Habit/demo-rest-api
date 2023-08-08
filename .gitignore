@@ -1,5 +1,7 @@
 .gradle
-
+.idea/modules.xml
+.idea/GAWEAN.main.iml
+.idea/GAWEAN.test.iml
 .idea/compiler.xml
 .idea/gradle.xml
 .idea/jarRepositories.xml
