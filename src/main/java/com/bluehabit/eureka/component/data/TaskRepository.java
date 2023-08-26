@@ -16,5 +16,4 @@ import java.util.Optional;
 public interface TaskRepository extends PagingAndSortingRepository<Task, String>, CrudRepository<Task, String> {
     @Query("select t from Task t where t.createdBy.id = ?1 and t.isPublish = false")
     Optional<Task> findPersonalTaskTemporary(String id);
-
 }

@@ -26,7 +26,6 @@ public class TaskPriorityService extends AbstractBaseService {
 
     public ResponseEntity<BaseResponse<PageResponse<TaskPriority>>> getListPriority(Pageable pageable) {
         final Page<TaskPriority> taskPriorities = taskPriorityRepository.findAll(pageable);
-
-        return BaseResponse.success(translate("auth.success"), new PageResponse<>(taskPriorities));
+        return BaseResponse.success(translate("auth.success"), taskPriorities);
     }
 }
