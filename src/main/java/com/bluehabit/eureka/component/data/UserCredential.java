@@ -9,13 +9,18 @@ package com.bluehabit.eureka.component.data;
 
 import com.bluehabit.eureka.component.AuthProvider;
 import com.bluehabit.eureka.component.UserStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,8 +29,8 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import java.time.OffsetDateTime;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -48,6 +53,7 @@ public class UserCredential {
     private String id;
     @Column(unique = true)
     private String email;
+    @JsonIgnore
     @Column
     private String password;
     @Enumerated(EnumType.ORDINAL)
@@ -56,11 +62,11 @@ public class UserCredential {
     @Enumerated(EnumType.ORDINAL)
     @Column(columnDefinition = "int2")
     private UserStatus status;
-    @OneToMany
-    private List<UserProfile> userInfo;
-    @Column
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Collection<UserProfile> userInfo;
+    @Temporal(TemporalType.TIMESTAMP)
     private OffsetDateTime createdAt;
-    @Column
+    @Temporal(TemporalType.TIMESTAMP)
     private OffsetDateTime updatedAt;
     @Column(name = "deleted", nullable = false)
     private boolean deleted;

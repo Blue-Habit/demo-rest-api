@@ -14,6 +14,7 @@ import com.bluehabit.eureka.common.MailUtil;
 import com.bluehabit.eureka.common.OtpGenerator;
 import com.bluehabit.eureka.component.AuthProvider;
 import com.bluehabit.eureka.component.UserStatus;
+import com.bluehabit.eureka.component.VerificationType;
 import com.bluehabit.eureka.component.data.UserCredential;
 import com.bluehabit.eureka.component.data.UserCredentialRepository;
 import com.bluehabit.eureka.component.data.UserProfile;
@@ -26,7 +27,6 @@ import com.bluehabit.eureka.component.model.OtpConfirmationRequest;
 import com.bluehabit.eureka.component.model.OtpConfirmationResponse;
 import com.bluehabit.eureka.component.model.SignUpWithEmailRequest;
 import com.bluehabit.eureka.component.model.SignUpWithEmailResponse;
-import com.bluehabit.eureka.component.VerificationType;
 import com.bluehabit.eureka.exception.GeneralErrorException;
 import com.bluehabit.eureka.exception.UnAuthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,6 +116,11 @@ public class SignUpService extends AbstractBaseService {
                 if (!userVerification.getToken().equals(req.otp())) {
                     throw new GeneralErrorException(HttpStatus.BAD_REQUEST.value(), translate("auth.sign_up.otp.failed"));
                 }
+                final UserCredential userCredential = userVerification.getUser();
+                userCredential.setStatus(UserStatus.ACTIVE);
+                userCredentialRepository.save(
+                    userCredential
+                );
                 return BaseResponse.success(
                     translate("auth.sign_up.otp.success"),
                     new OtpConfirmationResponse(
