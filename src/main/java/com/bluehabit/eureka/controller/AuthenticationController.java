@@ -29,11 +29,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
 @RestController
+@RequestMapping(
+    path = "/api/v1/auth/"
+)
 public class AuthenticationController {
     @Autowired
     private SignUpService signUpService;
@@ -49,7 +53,7 @@ public class AuthenticationController {
     //region sign up
 
     @PostMapping(
-        path = "/api/v1/auth/sign-up-email",
+        path = "sign-up-email",
         produces = MediaType.APPLICATION_JSON_VALUE,
         consumes = MediaType.APPLICATION_JSON_VALUE
     )
@@ -60,7 +64,7 @@ public class AuthenticationController {
     }
 
     @PostMapping(
-        path = "/api/v1/auth/otp-confirmation"
+        path = "otp-confirmation"
     )
     public ResponseEntity<BaseResponse<OtpConfirmationResponse>> otpConfirmation(
         @RequestBody OtpConfirmationRequest request
@@ -69,7 +73,7 @@ public class AuthenticationController {
     }
 
     @PostMapping(
-        path = "/api/v1/auth/complete-profile",
+        path = "complete-profile",
         produces = MediaType.APPLICATION_JSON_VALUE,
         consumes = MediaType.APPLICATION_JSON_VALUE
     )
@@ -83,7 +87,7 @@ public class AuthenticationController {
     //region sign in
 
     @PostMapping(
-        path = "/api/v1/auth/sign-in-google",
+        path = "sign-in-google",
         produces = MediaType.APPLICATION_JSON_VALUE,
         consumes = MediaType.APPLICATION_JSON_VALUE
     )
@@ -96,7 +100,7 @@ public class AuthenticationController {
     //end region
     //region reset password
     @PostMapping(
-        path = "/api/v1/auth/request-reset-password"
+        path = "request-reset-password"
     )
     public ResponseEntity<BaseResponse<Map<Object, Object>>> requestResetPassword(
         @RequestBody RequestResetPasswordRequest request
@@ -105,7 +109,7 @@ public class AuthenticationController {
     }
 
     @PostMapping(
-        path = "/api/v1/auth/link-confirmation"
+        path = "link-confirmation"
     )
     public ResponseEntity<BaseResponse<LinkResetPasswordConfirmationResponse>> linkResetPasswordConfirmation(
         @RequestBody LinkResetPasswordConfirmationRequest request
@@ -114,7 +118,7 @@ public class AuthenticationController {
     }
 
     @PostMapping(
-        path = "/api/v1/auth/reset-password"
+        path = "reset-password"
     )
     public ResponseEntity<BaseResponse<Map<Object, Object>>> resetPassword(
         @RequestHeader(value = tokenResetPassword, required = false) String token,
@@ -125,7 +129,7 @@ public class AuthenticationController {
     //end region
 
     @PostMapping(
-        path = "/api/v1/auth/sign-in"
+        path = "sign-in"
     )
     public ResponseEntity<BaseResponse<SignInResponse>> signIn(@RequestBody SignInWithEmailRequest request) {
         return signInService.signIn(request);

@@ -8,6 +8,7 @@
 package com.bluehabit.eureka.common;
 
 import jakarta.validation.ConstraintViolation;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -35,6 +36,10 @@ public final class BaseResponse<T> {
 
     public static <O> ResponseEntity<BaseResponse<O>> success(String message, O data) {
         return ResponseEntity.ok(new BaseResponse<>(HttpStatus.OK.value(), message, data));
+    }
+
+    public static <O> ResponseEntity<BaseResponse<PageResponse<O>>> success(String message, Page<O> data) {
+        return ResponseEntity.ok(new BaseResponse<>(HttpStatus.OK.value(), message, new PageResponse<>(data)));
     }
 
     public static Map<String, Object> validationFailed(List<ConstraintViolation<?>> violations) {

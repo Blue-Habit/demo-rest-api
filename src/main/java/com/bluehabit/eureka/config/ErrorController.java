@@ -18,6 +18,8 @@ import io.jsonwebtoken.security.SignatureException;
 import jakarta.validation.ConstraintViolationException;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -121,6 +123,24 @@ public class ErrorController {
         return BaseResponse.error(
             HttpStatus.NOT_FOUND.value(),
             "Something wrong"
+        );
+    }
+
+    @ExceptionHandler(value = HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public BaseResponse<String> unSupportedException(HttpMessageNotReadableException noHandlerFoundException) {
+        return BaseResponse.error(
+            HttpStatus.BAD_REQUEST.value(),
+            "Required request body is missing:"
+        );
+    }
+
+    @ExceptionHandler(value = HttpMessageNotWritableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public BaseResponse<String> httpMessageNotWritable(HttpMessageNotWritableException httpMessageNotWritableException) {
+        return BaseResponse.error(
+            HttpStatus.BAD_REQUEST.value(),
+            httpMessageNotWritableException.getMessage()
         );
     }
 }
