@@ -60,6 +60,8 @@ dependencies {
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
+
+    implementation("com.google.guava:guava:31.0.1-jre")
 }
 
 tasks.withType<Test> {
