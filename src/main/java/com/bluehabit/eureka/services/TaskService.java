@@ -251,22 +251,19 @@ public class TaskService extends AbstractBaseService {
         Pageable pageable
     ) {
         return getAuthenticatedUser(userCredential -> {
-            try {
-                if (statusId.isBlank()) {
-                    throw new GeneralErrorException(HttpStatus.BAD_REQUEST.value(), translate(""));
-                }
-                final Optional<TaskStatus> taskStatus = taskStatusRepository.findById(statusId);
-                if (taskStatus.isEmpty()) {
-                    throw new GeneralErrorException(HttpStatus.NOT_FOUND.value(), translate(""));
-                }
-                final Page<Task> listTaskByStatus = taskRepository.findByStatus(
-                    taskStatus.get(),
-                    pageable
-                );
-                return BaseResponse.success(translate(""), new PageResponse<>(listTaskByStatus));
-            } catch (Exception e) {
-                throw new GeneralErrorException(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+            if (statusId.isBlank()) {
+                throw new GeneralErrorException(HttpStatus.BAD_REQUEST.value(), translate(""));
             }
+            return taskStatusRepository
+                .findById(statusId)
+                .map(taskStatus -> {
+                    final Page<Task> listTaskByStatus = taskRepository.findByStatus(
+                        taskStatus,
+                        pageable
+                    );
+                    return BaseResponse.success(translate(""), new PageResponse<>(listTaskByStatus));
+                })
+                .orElseThrow(() -> new GeneralErrorException(HttpStatus.NOT_FOUND.value(), translate("")));
         }, () -> {
             throw new GeneralErrorException(HttpStatus.UNAUTHORIZED.value(), translate(""));
         });
