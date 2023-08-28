@@ -19,4 +19,6 @@
 /build
 fba.json
 
+/Uploads
+
 /src/main/resources/application.properties

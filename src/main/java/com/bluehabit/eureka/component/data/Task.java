@@ -63,6 +63,12 @@ public class Task {
         mappedBy = "task"
     )
     private Collection<TaskAttachment> attachments;
+    @OneToMany(
+        fetch = FetchType.EAGER,
+        cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST},
+        mappedBy = "task"
+    )
+    private Collection<SubTask> subtasks;
     @Column
     private String name;
     @Column
