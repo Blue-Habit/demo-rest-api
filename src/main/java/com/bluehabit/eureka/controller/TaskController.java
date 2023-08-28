@@ -137,4 +137,15 @@ public class TaskController {
     ) {
         return taskService.publishTask(request);
     }
+
+    @GetMapping(
+        path = "task-list-by-status/{statusId}",
+        produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<BaseResponse<PageResponse<Task>>> getListTaskByStatus(
+        @PathVariable("statusId") String statusId,
+        Pageable pageable
+    ) {
+        return taskService.getListTaskByStatus(statusId, pageable);
+    }
 }

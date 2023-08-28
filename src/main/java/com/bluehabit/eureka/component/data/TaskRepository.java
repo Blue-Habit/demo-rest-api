@@ -29,4 +29,6 @@ public interface TaskRepository extends PagingAndSortingRepository<Task, String>
 
     @Query("select t from Task t where t.createdBy.id = ?1 and t.isPublish = false")
     Optional<Task> findPersonalTaskTemporary(String id);
+
+    Page<Task> findByStatus(TaskStatus status, Pageable pageable);
 }

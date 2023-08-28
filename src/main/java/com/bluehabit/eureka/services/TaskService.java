@@ -19,6 +19,7 @@ import com.bluehabit.eureka.component.data.TaskAttachment;
 import com.bluehabit.eureka.component.data.TaskAttachmentRepository;
 import com.bluehabit.eureka.component.data.TaskPriorityRepository;
 import com.bluehabit.eureka.component.data.TaskRepository;
+import com.bluehabit.eureka.component.data.TaskStatus;
 import com.bluehabit.eureka.component.data.TaskStatusRepository;
 import com.bluehabit.eureka.component.model.PublishTaskRequest;
 import com.bluehabit.eureka.component.model.UploadAttachmentRequest;
@@ -244,4 +245,31 @@ public class TaskService extends AbstractBaseService {
             throw new UnAuthorizedException(HttpStatus.UNAUTHORIZED.value(), translate("unauthorized"));
         });
     }
+
+    public ResponseEntity<BaseResponse<PageResponse<Task>>> getListTaskByStatus(
+        String statusId,
+        Pageable pageable
+    ) {
+        return getAuthenticatedUser(userCredential -> {
+            try {
+                if (statusId.isBlank()) {
+                    throw new GeneralErrorException(HttpStatus.BAD_REQUEST.value(), translate(""));
+                }
+                final Optional<TaskStatus> taskStatus = taskStatusRepository.findById(statusId);
+                if (taskStatus.isEmpty()) {
+                    throw new GeneralErrorException(HttpStatus.NOT_FOUND.value(), translate(""));
+                }
+                final Page<Task> listTaskByStatus = taskRepository.findByStatus(
+                    taskStatus.get(),
+                    pageable
+                );
+                return BaseResponse.success(translate(""), new PageResponse<>(listTaskByStatus));
+            } catch (Exception e) {
+                throw new GeneralErrorException(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+            }
+        }, () -> {
+            throw new GeneralErrorException(HttpStatus.UNAUTHORIZED.value(), translate(""));
+        });
+    }
+
 }
