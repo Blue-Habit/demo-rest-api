@@ -192,8 +192,6 @@ public class TaskService extends AbstractBaseService {
     ) {
         validate(request);
         final OffsetDateTime currentDate = OffsetDateTime.now();
-        final OffsetDateTime startTask = OffsetDateTime.parse(request.start());
-        final OffsetDateTime endTask = OffsetDateTime.parse(request.end());
         return getAuthenticatedUser(user -> {
             return taskRepository
                 .findById(request.taskId())
@@ -209,11 +207,24 @@ public class TaskService extends AbstractBaseService {
                 //then saved all
                 .map(task -> {
 
-                    taskPriorityRepository.findById(request.priorityId()).ifPresent(task::setPriority);
+                    if (request.start() != null) {
+                        if (!request.start().isBlank()) {
+                            final OffsetDateTime startTask = OffsetDateTime.parse(request.start());
+                            task.setTaskStart(startTask);
+                        }
+                    }
+                    if (request.end() != null) {
+                        if (!request.end().isBlank()) {
+                            final OffsetDateTime endTask = OffsetDateTime.parse(request.end());
+                            task.setTaskEnd(endTask);
+                        }
+                    }
+
+                    if (request.priorityId() != null) {
+                        taskPriorityRepository.findById(request.priorityId()).ifPresent(task::setPriority);
+                    }
                     task.setName(request.taskName());
                     task.setDescription(request.taskDescription());
-                    task.setTaskStart(startTask);
-                    task.setTaskEnd(endTask);
                     task.setPublish(true);
                     task.setCreatedBy(user);
                     task.setCreatedAt(currentDate);
@@ -223,7 +234,7 @@ public class TaskService extends AbstractBaseService {
                         final String uuid = UUID.randomUUID().toString();
                         return new SubTask(
                             uuid,
-                            null,
+                            null,//default
                             task,
                             subTaskRequest.subTaskName(),
                             subTaskRequest.done(),
@@ -236,9 +247,8 @@ public class TaskService extends AbstractBaseService {
                     final List<SubTask> subTasksFinal = StreamSupport.stream(savedSubTasks.spliterator(), false)
                         .toList();
                     task.setSubtasks(subTasksFinal);
-                    final Task savedTask = taskRepository.save(task);
 
-                    return BaseResponse.success(translate("task.publish.success"), savedTask);
+                    return BaseResponse.success(translate("task.publish.success"), task);
                 }).orElseThrow(() -> new GeneralErrorException(HttpStatus.NO_CONTENT.value(), translate("task.publish.failed")));
         }, () -> {
             throw new UnAuthorizedException(HttpStatus.UNAUTHORIZED.value(), translate("unauthorized"));

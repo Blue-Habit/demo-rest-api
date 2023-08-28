@@ -17,6 +17,7 @@ import io.jsonwebtoken.io.DecodingException;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.validation.ConstraintViolationException;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
@@ -147,6 +148,15 @@ public class ErrorController {
     @ExceptionHandler(value = HttpMediaTypeNotSupportedException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public BaseResponse<String> mediaTypeNotSupported(HttpMediaTypeNotSupportedException mediaTypeNotSupportedException) {
+        return BaseResponse.error(
+            HttpStatus.BAD_REQUEST.value(),
+            mediaTypeNotSupportedException.getMessage()
+        );
+    }
+
+    @ExceptionHandler(value = InvalidDataAccessApiUsageException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public BaseResponse<String> requestBodyNull(InvalidDataAccessApiUsageException mediaTypeNotSupportedException) {
         return BaseResponse.error(
             HttpStatus.BAD_REQUEST.value(),
             mediaTypeNotSupportedException.getMessage()
