@@ -137,4 +137,14 @@ public class TaskController {
     ) {
         return taskService.publishTask(request);
     }
+
+    @DeleteMapping(
+        path = "delete-task/{taskId}",
+        produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<BaseResponse<Task>> deleteTask(
+        @PathVariable("taskId") String taskId
+    ) {
+        return taskService.deleteTask(taskId);
+    }
 }

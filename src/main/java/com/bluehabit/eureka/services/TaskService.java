@@ -254,4 +254,16 @@ public class TaskService extends AbstractBaseService {
             throw new UnAuthorizedException(HttpStatus.UNAUTHORIZED.value(), translate("unauthorized"));
         });
     }
+
+    public ResponseEntity<BaseResponse<Task>> deleteTask(
+        String taskId
+    ) {
+        return taskRepository.findById(taskId)
+            .map(task -> {
+                taskRepository.deleteById(taskId);
+                return BaseResponse.success(translate(""), task);
+            })
+            .orElseThrow(() -> new GeneralErrorException(HttpStatus.NOT_FOUND.value(), translate("")));
+    }
+
 }
