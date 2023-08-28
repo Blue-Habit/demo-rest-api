@@ -234,7 +234,7 @@ public class TaskService extends AbstractBaseService {
                         final String uuid = UUID.randomUUID().toString();
                         return new SubTask(
                             uuid,
-                            null,//default
+                            null,
                             task,
                             subTaskRequest.subTaskName(),
                             subTaskRequest.done(),
