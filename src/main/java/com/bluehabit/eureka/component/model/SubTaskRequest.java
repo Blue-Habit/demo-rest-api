@@ -7,12 +7,11 @@
 
 package com.bluehabit.eureka.component.model;
 
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 
-import java.util.List;
-
-public record DeleteRolesRequest(
-    @NotEmpty List<String> ids
+public record SubTaskRequest(
+    @NotBlank
+    String subTaskName,
+    boolean done
 ) {
-
 }

@@ -11,9 +11,16 @@ import jakarta.validation.constraints.NotBlank;
 
 import java.util.List;
 
-public record CreateRoleRequest(
-        @NotBlank String roleName,
-        @NotBlank String roleDescription,
-        List<String> permission
+public record PublishTaskRequest(
+    @NotBlank
+    String taskId,
+    @NotBlank
+    String taskName,
+    @NotBlank
+    String taskDescription,
+    String priorityId,
+    String start,
+    String end,
+    List<SubTaskRequest> subtask
 ) {
 }
