@@ -7,7 +7,8 @@
 
 package com.bluehabit.eureka.common;
 
-import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -37,13 +38,22 @@ public final class BaseResponse<T> {
         return ResponseEntity.ok(new BaseResponse<>(HttpStatus.OK.value(), message, data));
     }
 
-    public static Map<String, Object> validationFailed(List<ConstraintViolation<?>> violations) {
-        return Map.ofEntries(
-            Map.entry("statusCode", Constant.BKA_1008),
-            Map.entry("data", ""),
-            Map.entry("message", "Validation"),
-            Map.entry("errorField", violations.stream().map(value -> Map.of(value.getPropertyPath(), value.getMessage())))
-        );
+    public static <O> ResponseEntity<BaseResponse<PageResponse<O>>> success(String message, Page<O> data) {
+        return ResponseEntity.ok(new BaseResponse<>(HttpStatus.OK.value(), message, new PageResponse<>(data)));
+    }
+
+    public static Map<String, Object> validationFailed(ConstraintViolationException errors) {
+            final List<Map<String, String>> constraint = errors.getConstraintViolations()
+                .stream()
+                .map(constraintViolation -> {
+                    return Map.of(constraintViolation.getPropertyPath().toString(), constraintViolation.getMessage());
+                }).toList();
+            return Map.ofEntries(
+                Map.entry("statusCode", Constant.BKA_1008),
+                Map.entry("data", ""),
+                Map.entry("message", "Validation"),
+                Map.entry("errorField", constraint)
+            );
     }
 
     public int getStatusCode() {

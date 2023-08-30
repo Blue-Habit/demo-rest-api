@@ -17,8 +17,12 @@ import io.jsonwebtoken.io.DecodingException;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.validation.ConstraintViolationException;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -31,9 +35,8 @@ public class ErrorController {
     @ExceptionHandler(value = ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, Object> validation(ConstraintViolationException violationException) {
-        return BaseResponse.validationFailed(
-            violationException.getConstraintViolations().stream().toList()
-        );
+
+        return BaseResponse.validationFailed(violationException);
     }
 
     @ExceptionHandler(value = SignatureException.class)
@@ -121,6 +124,42 @@ public class ErrorController {
         return BaseResponse.error(
             HttpStatus.NOT_FOUND.value(),
             "Something wrong"
+        );
+    }
+
+    @ExceptionHandler(value = HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public BaseResponse<String> unSupportedException(HttpMessageNotReadableException noHandlerFoundException) {
+        return BaseResponse.error(
+            HttpStatus.BAD_REQUEST.value(),
+            "Required request body is missing:"
+        );
+    }
+
+    @ExceptionHandler(value = HttpMessageNotWritableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public BaseResponse<String> httpMessageNotWritable(HttpMessageNotWritableException httpMessageNotWritableException) {
+        return BaseResponse.error(
+            HttpStatus.BAD_REQUEST.value(),
+            httpMessageNotWritableException.getMessage()
+        );
+    }
+
+    @ExceptionHandler(value = HttpMediaTypeNotSupportedException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public BaseResponse<String> mediaTypeNotSupported(HttpMediaTypeNotSupportedException mediaTypeNotSupportedException) {
+        return BaseResponse.error(
+            HttpStatus.BAD_REQUEST.value(),
+            mediaTypeNotSupportedException.getMessage()
+        );
+    }
+
+    @ExceptionHandler(value = InvalidDataAccessApiUsageException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public BaseResponse<String> requestBodyNull(InvalidDataAccessApiUsageException mediaTypeNotSupportedException) {
+        return BaseResponse.error(
+            HttpStatus.BAD_REQUEST.value(),
+            mediaTypeNotSupportedException.getMessage()
         );
     }
 }

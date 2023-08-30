@@ -85,17 +85,19 @@ public class FilterRequest extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authToken);
 
             filterChain.doFilter(request, response);
-        } catch (UnAuthorizedException exception) {
+        } catch (Exception exception) {
             resolver.resolveException(request, response, null, exception);
         }
     }
 
     private void setLocale(HttpServletRequest request) {
         final String locale = request.getHeader("Accept-Language");
-        if (!locale.isEmpty() && !locale.isBlank()) {
-            LocaleContextHolder.setDefaultLocale(Locale.forLanguageTag(locale));
-        } else {
-            LocaleContextHolder.setLocale(Locale.forLanguageTag("ID"));
+        if (locale != null) {
+            if (!locale.isEmpty() && !locale.isBlank()) {
+                LocaleContextHolder.setDefaultLocale(Locale.forLanguageTag(locale));
+            } else {
+                LocaleContextHolder.setLocale(Locale.forLanguageTag("ID"));
+            }
         }
     }
 }

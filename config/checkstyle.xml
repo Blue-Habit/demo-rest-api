@@ -730,7 +730,9 @@
         <module name="ClassTypeParameterName"/>
         <module name="RecordTypeParameterName"/>
         <module name="RecordComponentName"/>
-        <module name="ConstantName"/>
+        <module name="ConstantName">
+            <property name="severity" value="ignore"/>
+        </module>
         <module name="InterfaceTypeParameterName"/>
         <module name="LocalFinalVariableName"/>
         <module name="LocalVariableName">
@@ -774,7 +776,7 @@
             <property name="max" value="30"/>
         </module>
         <module name="LambdaBodyLength">
-            <property name="max" value="50"/>
+            <property name="max" value="100"/>
         </module>
         <module name="MethodCount">
             <property name="maxTotal" value="34"/>

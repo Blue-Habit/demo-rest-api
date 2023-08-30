@@ -7,9 +7,13 @@
 
 package com.bluehabit.eureka.component.data;
 
+import com.bluehabit.eureka.component.AttachmentType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
@@ -45,12 +49,14 @@ public class TaskAttachment {
         type = org.hibernate.id.uuid.UuidGenerator.class
     )
     private String id;
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     private Task task;
     @Column
     private String name;
-    @Column
-    private String type;
+    @Enumerated(EnumType.ORDINAL)
+    @Column(columnDefinition = "int2")
+    private AttachmentType type;
     @Column
     private String mimeType;
     @Column
