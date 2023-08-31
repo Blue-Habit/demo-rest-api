@@ -254,4 +254,28 @@ public class TaskService extends AbstractBaseService {
             throw new UnAuthorizedException(HttpStatus.UNAUTHORIZED.value(), translate("unauthorized"));
         });
     }
+
+    public ResponseEntity<BaseResponse<PageResponse<Task>>> getListTaskByStatus(
+        String statusId,
+        Pageable pageable
+    ) {
+        return getAuthenticatedUser(userCredential -> {
+            if (statusId.isBlank()) {
+                throw new GeneralErrorException(HttpStatus.BAD_REQUEST.value(), translate(""));
+            }
+            return taskStatusRepository
+                .findById(statusId)
+                .map(taskStatus -> {
+                    final Page<Task> listTaskByStatus = taskRepository.findByStatus(
+                        taskStatus,
+                        pageable
+                    );
+                    return BaseResponse.success(translate(""), new PageResponse<>(listTaskByStatus));
+                })
+                .orElseThrow(() -> new GeneralErrorException(HttpStatus.NOT_FOUND.value(), translate("")));
+        }, () -> {
+            throw new GeneralErrorException(HttpStatus.UNAUTHORIZED.value(), translate(""));
+        });
+    }
+
 }
