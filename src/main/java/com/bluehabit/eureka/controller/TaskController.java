@@ -151,7 +151,7 @@ public class TaskController {
     }
 
     @PostMapping(
-        path = "publish",
+        path = "edit",
         produces = MediaType.APPLICATION_JSON_VALUE,
         consumes = MediaType.APPLICATION_JSON_VALUE
     )
