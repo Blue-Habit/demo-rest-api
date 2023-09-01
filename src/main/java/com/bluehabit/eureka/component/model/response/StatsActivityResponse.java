@@ -5,9 +5,13 @@
  * Proprietary and confidential
  */
 
-package com.bluehabit.eureka.component.model;
+package com.bluehabit.eureka.component.model.response;
 
-public record OtpConfirmationResponse(
-    String sessionId
+import java.time.LocalDate;
+
+public record StatsActivityResponse(
+    LocalDate date,
+    int total
+
 ) {
 }

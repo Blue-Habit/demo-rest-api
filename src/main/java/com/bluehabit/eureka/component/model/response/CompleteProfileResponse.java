@@ -5,11 +5,12 @@
  * Proprietary and confidential
  */
 
-package com.bluehabit.eureka.component.model;
+package com.bluehabit.eureka.component.model.response;
 
-import jakarta.validation.constraints.NotBlank;
+import java.util.Map;
 
-public record SignUpWithEmailRequest(
-        @NotBlank String email
+public record CompleteProfileResponse(
+    String token,
+    Map<String, Object> user
 ) {
 }

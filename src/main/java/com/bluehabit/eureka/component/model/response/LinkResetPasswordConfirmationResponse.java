@@ -5,10 +5,9 @@
  * Proprietary and confidential
  */
 
-package com.bluehabit.eureka.component.model;
+package com.bluehabit.eureka.component.model.response;
 
-import jakarta.validation.constraints.NotBlank;
-
-public record ResetPasswordRequest(@NotBlank String newPassword) {
-
+public record LinkResetPasswordConfirmationResponse(
+    String sessionId
+) {
 }

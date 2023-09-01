@@ -12,6 +12,8 @@ import com.bluehabit.eureka.common.BaseResponse;
 import com.bluehabit.eureka.common.FileUtil;
 import com.bluehabit.eureka.common.PageResponse;
 import com.bluehabit.eureka.component.AttachmentType;
+import com.bluehabit.eureka.component.data.FavoriteTask;
+import com.bluehabit.eureka.component.data.FavoriteTaskRepository;
 import com.bluehabit.eureka.component.data.SubTask;
 import com.bluehabit.eureka.component.data.SubTaskRepository;
 import com.bluehabit.eureka.component.data.Task;
@@ -24,6 +26,8 @@ import com.bluehabit.eureka.component.model.EditSubTaskRequest;
 import com.bluehabit.eureka.component.model.EditTaskRequest;
 import com.bluehabit.eureka.component.model.PublishTaskRequest;
 import com.bluehabit.eureka.component.model.UploadAttachmentRequest;
+import com.bluehabit.eureka.component.model.request.PublishTaskRequest;
+import com.bluehabit.eureka.component.model.request.UploadAttachmentRequest;
 import com.bluehabit.eureka.exception.GeneralErrorException;
 import com.bluehabit.eureka.exception.UnAuthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,11 +65,30 @@ public class TaskService extends AbstractBaseService {
     @Autowired
     private SubTaskRepository subTaskRepository;
 
+    @Autowired
+    private FavoriteTaskRepository favoriteTaskRepository;
+
     public ResponseEntity<BaseResponse<PageResponse<Task>>> getListTask(Pageable pageable) {
         return getAuthenticatedUser(userCredential -> {
             final Page<Task> getListTask = taskRepository.getListTaskByUser(userCredential, pageable);
 
             return BaseResponse.success(translate(""), new PageResponse<>(getListTask));
+        }, () -> {
+            throw new GeneralErrorException(HttpStatus.UNAUTHORIZED.value(), translate(""));
+        });
+    }
+
+    public ResponseEntity<BaseResponse<Task>> getDetailTask(String taskId) {
+        return getAuthenticatedUser(userCredential -> {
+            return taskRepository.findById(taskId)
+                .map(task -> {
+                    if (!task.getCreatedBy().getId().equals(userCredential.getId())) {
+                        throw new GeneralErrorException(HttpStatus.BAD_REQUEST.value(), translate(""));
+                    }
+                    return BaseResponse.success(translate(""), task);
+                })
+                .orElseThrow(() -> new GeneralErrorException(HttpStatus.BAD_REQUEST.value(), translate("")));
+
         }, () -> {
             throw new GeneralErrorException(HttpStatus.UNAUTHORIZED.value(), translate(""));
         });
@@ -107,6 +130,20 @@ public class TaskService extends AbstractBaseService {
 
         }, () -> {
             throw new GeneralErrorException(HttpStatus.UNAUTHORIZED.value(), translate(""));
+        });
+    }
+
+    public ResponseEntity<BaseResponse<PageResponse<FavoriteTask>>> getListStarredTask(
+        Pageable pageable
+    ) {
+        return getAuthenticatedUser(userCredential -> {
+            final Page<FavoriteTask> favorite = favoriteTaskRepository.findStarredTaskByUser(
+                userCredential,
+                pageable
+            );
+            return BaseResponse.success(translate(""), new PageResponse<>(favorite));
+        }, () -> {
+            throw new GeneralErrorException(HttpStatus.BAD_REQUEST.value(), translate(""));
         });
     }
 

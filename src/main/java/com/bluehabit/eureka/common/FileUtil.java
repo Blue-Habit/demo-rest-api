@@ -19,10 +19,29 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class FileUtil {
-    private static final String folderUpload = "Uploads";
+    private static final String folderUpload = "uploads";
+    private static final String folderProfile = "uploads/profile";
 
     public static Optional<String> saveFile(MultipartFile multipartFile, String fileName) {
         final Path uploadPath = Paths.get(folderUpload);
+        try (InputStream inputStream = multipartFile.getInputStream()) {
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+            final Optional<String> ext = org.assertj.core.util.Files
+                .getFileNameExtension(Objects.requireNonNull(multipartFile.getOriginalFilename()));
+            final String finalFileName = fileName + "." + ext.get();
+            final Path filePath = uploadPath.resolve(finalFileName);
+            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+
+            return Optional.of(finalFileName);
+        } catch (IOException ioe) {
+            return Optional.empty();
+        }
+    }
+
+    public static Optional<String> saveProfilePicture(MultipartFile multipartFile, String fileName) {
+        final Path uploadPath = Paths.get(folderProfile);
         try (InputStream inputStream = multipartFile.getInputStream()) {
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);

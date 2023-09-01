@@ -5,12 +5,13 @@
  * Proprietary and confidential
  */
 
-package com.bluehabit.eureka.component.model;
+package com.bluehabit.eureka.component.model.request;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record OtpConfirmationRequest(
-    @NotBlank String otp,
-    @NotBlank String sessionId
+public record SubTaskRequest(
+    @NotBlank
+    String subTaskName,
+    boolean done
 ) {
 }

@@ -5,13 +5,9 @@
  * Proprietary and confidential
  */
 
-package com.bluehabit.eureka.component.model;
+package com.bluehabit.eureka.component.model.request;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record CompleteProfileRequest(
-    @NotBlank String sessionId,
-    @NotBlank String fullName,
-    @NotBlank String password
-) {
+public record RequestChangePasswordRequest(@NotBlank String password) {
 }

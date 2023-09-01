@@ -5,12 +5,9 @@
  * Proprietary and confidential
  */
 
-package com.bluehabit.eureka.component.model;
+package com.bluehabit.eureka.component.model.response;
 
-import java.util.Map;
-
-public record CompleteProfileResponse(
-    String token,
-    Map<String, Object> user
+public record SignUpWithEmailResponse(
+    String sessionId
 ) {
 }
