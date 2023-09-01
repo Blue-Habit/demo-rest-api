@@ -18,6 +18,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TaskRepository extends PagingAndSortingRepository<Task, String>, CrudRepository<Task, String> {
+    @Query("select t from Task t where t.createdBy.id = ?1 and t.createdAt between ?2 and ?3")
+    List<Task> getStatistic(String id, OffsetDateTime createdAtStart, OffsetDateTime createdAtEnd);
+
     @Query("select t from Task t where t.name like concat(?1, '%')")
     List<Task> findByNameStartWith(String name);
 

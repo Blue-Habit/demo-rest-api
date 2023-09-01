@@ -5,9 +5,12 @@
  * Proprietary and confidential
  */
 
-package com.bluehabit.eureka.component.model;
+package com.bluehabit.eureka.component.model.response;
 
-public record LinkResetPasswordConfirmationResponse(
-    String sessionId
+import java.util.Map;
+
+public record SignInResponse(
+    String token,
+    Map<String, Object> user
 ) {
 }

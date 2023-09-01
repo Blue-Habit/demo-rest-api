@@ -5,9 +5,9 @@
  * Proprietary and confidential
  */
 
-package com.bluehabit.eureka.component.model;
+package com.bluehabit.eureka.component.model.request;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record SignInWithGoogleRequest(@NotBlank String token) {
+public record RequestResetPasswordRequest(@NotBlank String email) {
 }

@@ -5,9 +5,11 @@
  * Proprietary and confidential
  */
 
-package com.bluehabit.eureka.component.model;
+package com.bluehabit.eureka.component.model.request;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record LinkResetPasswordConfirmationRequest(@NotBlank String token) {
+public record SignUpWithEmailRequest(
+        @NotBlank String email
+) {
 }

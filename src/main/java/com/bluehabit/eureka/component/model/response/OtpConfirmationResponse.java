@@ -5,9 +5,9 @@
  * Proprietary and confidential
  */
 
-package com.bluehabit.eureka.component.model;
+package com.bluehabit.eureka.component.model.response;
 
-public record SignUpWithEmailResponse(
+public record OtpConfirmationResponse(
     String sessionId
 ) {
 }
