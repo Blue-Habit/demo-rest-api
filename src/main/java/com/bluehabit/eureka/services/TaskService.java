@@ -303,11 +303,11 @@ public class TaskService extends AbstractBaseService {
                         task.setTaskStart(startDate);
                         task.setTaskEnd(endDate);
                         task.setUpdatedAt(currentDate);
-                        Iterable<String> subTaskIds = editTaskRequest.subTasks().stream().map(EditSubTaskRequest::subTaskId).toList();
+                        final Iterable<String> subTaskIds = editTaskRequest.subTasks().stream().map(EditSubTaskRequest::subTaskId).toList();
                         subTaskRepository
                             .findAllById(subTaskIds)
                             .forEach(subTask -> {
-                                Optional<EditSubTaskRequest> subTaskRequest = editTaskRequest.subTasks().stream().filter(
+                                final Optional<EditSubTaskRequest> subTaskRequest = editTaskRequest.subTasks().stream().filter(
                                     subTaskInRequest -> Objects.equals(subTaskInRequest.subTaskId(), subTask.getId())
                                 ).findFirst();
                                 if (subTaskRequest.isPresent()) {
