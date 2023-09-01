@@ -9,12 +9,13 @@ package com.bluehabit.eureka.controller;
 
 import com.bluehabit.eureka.common.BaseResponse;
 import com.bluehabit.eureka.common.PageResponse;
+import com.bluehabit.eureka.component.data.FavoriteTask;
 import com.bluehabit.eureka.component.data.Task;
 import com.bluehabit.eureka.component.data.TaskAttachment;
 import com.bluehabit.eureka.component.data.TaskPriority;
 import com.bluehabit.eureka.component.data.TaskStatus;
-import com.bluehabit.eureka.component.model.PublishTaskRequest;
-import com.bluehabit.eureka.component.model.UploadAttachmentRequest;
+import com.bluehabit.eureka.component.model.request.PublishTaskRequest;
+import com.bluehabit.eureka.component.model.request.UploadAttachmentRequest;
 import com.bluehabit.eureka.services.TaskPriorityService;
 import com.bluehabit.eureka.services.TaskService;
 import com.bluehabit.eureka.services.TaskStatusService;
@@ -45,6 +46,26 @@ public class TaskController {
 
     @Autowired
     private TaskService taskService;
+
+    @GetMapping(
+        path = "{taskId}",
+        produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<BaseResponse<Task>> getDetailTask(
+        @PathVariable("taskId") String taskId
+    ) {
+        return taskService.getDetailTask(taskId);
+    }
+
+    @GetMapping(
+        path = "list-starred-task",
+        produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<BaseResponse<PageResponse<FavoriteTask>>> getStarredTask(
+        Pageable pageable
+    ) {
+        return taskService.getListStarredTask(pageable);
+    }
 
     @GetMapping(
         path = "search",

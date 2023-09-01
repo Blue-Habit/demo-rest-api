@@ -5,11 +5,12 @@
  * Proprietary and confidential
  */
 
-package com.bluehabit.eureka.component.model;
+package com.bluehabit.eureka.component.model.request;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record SignInWithEmailRequest(
-    @NotBlank String email, @NotBlank String password
+public record OtpConfirmationRequest(
+    @NotBlank String otp,
+    @NotBlank String sessionId
 ) {
 }

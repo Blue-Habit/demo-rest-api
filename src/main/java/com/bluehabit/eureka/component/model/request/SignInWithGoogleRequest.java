@@ -5,12 +5,9 @@
  * Proprietary and confidential
  */
 
-package com.bluehabit.eureka.component.model;
+package com.bluehabit.eureka.component.model.request;
 
-import java.util.Map;
+import jakarta.validation.constraints.NotBlank;
 
-public record SignInResponse(
-    String token,
-    Map<String, Object> user
-) {
+public record SignInWithGoogleRequest(@NotBlank String token) {
 }

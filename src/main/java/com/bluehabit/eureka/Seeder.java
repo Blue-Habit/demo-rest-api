@@ -9,6 +9,7 @@ package com.bluehabit.eureka;
 
 import com.bluehabit.eureka.component.AuthProvider;
 import com.bluehabit.eureka.component.UserStatus;
+import com.bluehabit.eureka.component.data.SubTaskRepository;
 import com.bluehabit.eureka.component.data.TaskPriority;
 import com.bluehabit.eureka.component.data.TaskPriorityRepository;
 import com.bluehabit.eureka.component.data.TaskStatus;
@@ -43,6 +44,9 @@ public class Seeder implements ApplicationRunner {
 
     @Autowired
     private TaskStatusRepository taskStatusRepository;
+
+    @Autowired
+    private SubTaskRepository subTaskRepository;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
