@@ -14,6 +14,7 @@ import com.bluehabit.eureka.component.data.Task;
 import com.bluehabit.eureka.component.data.TaskAttachment;
 import com.bluehabit.eureka.component.data.TaskPriority;
 import com.bluehabit.eureka.component.data.TaskStatus;
+import com.bluehabit.eureka.component.model.EditTaskRequest;
 import com.bluehabit.eureka.component.model.request.PublishTaskRequest;
 import com.bluehabit.eureka.component.model.request.UploadAttachmentRequest;
 import com.bluehabit.eureka.services.TaskPriorityService;
@@ -169,4 +170,16 @@ public class TaskController {
     ) {
         return taskService.getListTaskByStatus(statusId, pageable);
     }
+
+    @PostMapping(
+        path = "edit",
+        produces = MediaType.APPLICATION_JSON_VALUE,
+        consumes = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<BaseResponse<Task>> editTask(
+        @RequestBody EditTaskRequest request
+        ) {
+        return taskService.editTask(request);
+    }
+
 }

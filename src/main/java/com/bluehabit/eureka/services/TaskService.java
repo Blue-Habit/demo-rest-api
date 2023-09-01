@@ -22,6 +22,8 @@ import com.bluehabit.eureka.component.data.TaskAttachmentRepository;
 import com.bluehabit.eureka.component.data.TaskPriorityRepository;
 import com.bluehabit.eureka.component.data.TaskRepository;
 import com.bluehabit.eureka.component.data.TaskStatusRepository;
+import com.bluehabit.eureka.component.model.EditSubTaskRequest;
+import com.bluehabit.eureka.component.model.EditTaskRequest;
 import com.bluehabit.eureka.component.model.request.PublishTaskRequest;
 import com.bluehabit.eureka.component.model.request.UploadAttachmentRequest;
 import com.bluehabit.eureka.exception.GeneralErrorException;
@@ -38,6 +40,7 @@ import java.text.SimpleDateFormat;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.StreamSupport;
@@ -308,6 +311,54 @@ public class TaskService extends AbstractBaseService {
                     return BaseResponse.success(translate(""), new PageResponse<>(listTaskByStatus));
                 })
                 .orElseThrow(() -> new GeneralErrorException(HttpStatus.NOT_FOUND.value(), translate("")));
+        }, () -> {
+            throw new GeneralErrorException(HttpStatus.UNAUTHORIZED.value(), translate(""));
+        });
+    }
+
+    public ResponseEntity<BaseResponse<Task>> editTask(
+        EditTaskRequest editTaskRequest
+    ) {
+        return getAuthenticatedUser(userCredential -> {
+            try {
+                final OffsetDateTime startDate = new SimpleDateFormat("yyyy-MM-dd")
+                    .parse(editTaskRequest.taskStartDate())
+                    .toInstant()
+                    .atOffset(ZoneOffset.UTC);
+                final OffsetDateTime endDate = new SimpleDateFormat("yyyy-MM-dd")
+                    .parse(editTaskRequest.taskEndDate())
+                    .toInstant()
+                    .atOffset(ZoneOffset.UTC);
+                final OffsetDateTime currentDate = OffsetDateTime.now();
+                return taskRepository
+                    .findById(editTaskRequest.taskId())
+                    .map(task -> {
+                        task.setName(editTaskRequest.taskName());
+                        task.setDescription(editTaskRequest.taskDescription());
+                        task.setTaskStart(startDate);
+                        task.setTaskEnd(endDate);
+                        task.setUpdatedAt(currentDate);
+                        final Iterable<String> subTaskIds = editTaskRequest.subTasks().stream().map(EditSubTaskRequest::subTaskId).toList();
+                        subTaskRepository
+                            .findAllById(subTaskIds)
+                            .forEach(subTask -> {
+                                final Optional<EditSubTaskRequest> subTaskRequest = editTaskRequest.subTasks().stream().filter(
+                                    subTaskInRequest -> Objects.equals(subTaskInRequest.subTaskId(), subTask.getId())
+                                ).findFirst();
+                                if (subTaskRequest.isPresent()) {
+                                    subTask.setName(subTaskRequest.get().subTaskName());
+                                    subTask.setDone(subTaskRequest.get().done());
+                                    subTaskRepository.save(subTask);
+                                }
+                            });
+                        taskRepository.save(task);
+                        return BaseResponse.success(translate(""), task);
+                    })
+                    .orElseThrow(() -> new GeneralErrorException(HttpStatus.NOT_FOUND.value(), translate("")));
+
+            } catch (ParseException parseException) {
+                throw new GeneralErrorException(HttpStatus.BAD_REQUEST.value(), parseException.getMessage());
+            }
         }, () -> {
             throw new GeneralErrorException(HttpStatus.UNAUTHORIZED.value(), translate(""));
         });
