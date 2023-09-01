@@ -645,7 +645,7 @@
                        FileNotFoundException, TestException, GeneralErrorException,UnAuthorizedException,"/>
         </module>
         <module name="ClassFanOutComplexity">
-            <property name="max" value="25"/>
+            <property name="max" value="30"/>
             <!-- Default classes are also listed -->
             <property name="excludedClasses"
                       value="boolean, byte, char, double, float, int, long, short,

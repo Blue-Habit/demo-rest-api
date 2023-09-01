@@ -15,8 +15,6 @@ import com.bluehabit.eureka.component.data.TaskAttachment;
 import com.bluehabit.eureka.component.data.TaskPriority;
 import com.bluehabit.eureka.component.data.TaskStatus;
 import com.bluehabit.eureka.component.model.EditTaskRequest;
-import com.bluehabit.eureka.component.model.PublishTaskRequest;
-import com.bluehabit.eureka.component.model.UploadAttachmentRequest;
 import com.bluehabit.eureka.component.model.request.PublishTaskRequest;
 import com.bluehabit.eureka.component.model.request.UploadAttachmentRequest;
 import com.bluehabit.eureka.services.TaskPriorityService;
