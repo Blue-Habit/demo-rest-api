@@ -25,7 +25,6 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
     private static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
-    private static final Date EXPIRATION_TOKEN = new Date(System.currentTimeMillis() + 1000 * 60 * 30);
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -75,11 +74,14 @@ public class JwtUtil {
     }
 
     private String createToken(Map<String, Object> claims, String userName) {
+        final Date issuedAt = new Date(System.currentTimeMillis());
+        final Date expiredAt = new Date(System.currentTimeMillis() + 1000 * 60 * 30);
+
         return Jwts.builder()
             .setClaims(claims)
             .setSubject(userName)
-            .setIssuedAt(new Date(System.currentTimeMillis()))
-            .setExpiration(EXPIRATION_TOKEN)
+            .setIssuedAt(issuedAt)
+            .setExpiration(expiredAt)
             .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
 
