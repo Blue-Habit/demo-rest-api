@@ -13,7 +13,7 @@ import com.bluehabit.eureka.component.model.request.ChangePasswordRequest;
 import com.bluehabit.eureka.component.model.request.RequestChangePasswordRequest;
 import com.bluehabit.eureka.component.model.request.UploadPhotoProfileRequest;
 import com.bluehabit.eureka.component.model.response.UserStatsResponse;
-import com.bluehabit.eureka.services.UserInfoService;
+import com.bluehabit.eureka.services.UserProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,14 +30,14 @@ import java.util.Map;
 public class ProfileController {
 
     @Autowired
-    private UserInfoService userInfoService;
+    private UserProfileService userProfileService;
 
     @GetMapping(
         path = "detail",
         produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<BaseResponse<Map<String, Object>>> getProfile() {
-        return userInfoService.getDetailProfile();
+        return userProfileService.getDetailProfile();
     }
 
     @GetMapping(
@@ -45,7 +45,7 @@ public class ProfileController {
         produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<BaseResponse<UserStatsResponse>> getStats() {
-        return userInfoService.getStatistics();
+        return userProfileService.getStatistics();
     }
 
     @PostMapping(
@@ -56,7 +56,7 @@ public class ProfileController {
     public ResponseEntity<BaseResponse<UserCredential>> updatePhotoProfile(
         @ModelAttribute UploadPhotoProfileRequest request
     ) {
-        return userInfoService.uploadProfilePicture(request);
+        return userProfileService.uploadProfilePicture(request);
     }
 
     @PostMapping(
@@ -67,7 +67,7 @@ public class ProfileController {
     public ResponseEntity<BaseResponse<Object>> requestChangePassword(
         @ModelAttribute RequestChangePasswordRequest request
     ) {
-        return userInfoService.requestChangePassword(request);
+        return userProfileService.requestChangePassword(request);
     }
 
     @PostMapping(
@@ -78,6 +78,6 @@ public class ProfileController {
     public ResponseEntity<BaseResponse<Object>> changePassword(
         @ModelAttribute ChangePasswordRequest request
     ) {
-        return userInfoService.changePassword(request);
+        return userProfileService.changePassword(request);
     }
 }
