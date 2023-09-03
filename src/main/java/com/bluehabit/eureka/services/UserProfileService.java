@@ -39,8 +39,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class UserProfileService extends AbstractBaseService  {
+public class UserProfileService extends AbstractBaseService {
+
     private static final String keyPhotoProfile = "photoProfile";
+
     @Autowired
     private UserCredentialRepository userCredentialRepository;
 
