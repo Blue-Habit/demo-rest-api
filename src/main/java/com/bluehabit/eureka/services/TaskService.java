@@ -99,7 +99,7 @@ public class TaskService extends AbstractBaseService {
     ) {
         return getAuthenticatedUser(userCredential -> {
             try {
-                if(fromDate == null || toDate == null){
+                if(fromDate == null || toDate == null) {
                     throw new GeneralErrorException(HttpStatus.BAD_REQUEST.value(), translate(""));
                 }
                 if (fromDate.isBlank() || toDate.isBlank()) {
