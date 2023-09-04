@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -83,8 +84,8 @@ public class TaskController {
         produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<BaseResponse<PageResponse<Task>>> getListTask(
-        @Param("from") String fromDate,
-        @Param("to") String toDate,
+        @RequestParam("from") String fromDate,
+        @RequestParam("to") String toDate,
         Pageable pageable
     ) {
         return taskService.getListTaskByDate(fromDate, toDate, pageable);
