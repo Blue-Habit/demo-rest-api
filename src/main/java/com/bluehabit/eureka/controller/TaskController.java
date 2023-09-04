@@ -83,11 +83,11 @@ public class TaskController {
         produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<BaseResponse<PageResponse<Task>>> getListTask(
-        @Param("from") String from,
-        @Param("to") String to,
+        @Param("from") String fromDate,
+        @Param("to") String toDate,
         Pageable pageable
     ) {
-        return taskService.getListTaskByDate(from, to, pageable);
+        return taskService.getListTaskByDate(fromDate, toDate, pageable);
     }
 
     @GetMapping(

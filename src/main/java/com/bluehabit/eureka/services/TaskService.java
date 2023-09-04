@@ -93,22 +93,22 @@ public class TaskService extends AbstractBaseService {
     }
 
     public ResponseEntity<BaseResponse<PageResponse<Task>>> getListTaskByDate(
-        String from,
-        String to,
+        String fromDate,
+        String toDate,
         Pageable pageable
     ) {
         return getAuthenticatedUser(userCredential -> {
             try {
-                if (from.isBlank() || to.isBlank()) {
+                if (fromDate.isBlank() || toDate.isBlank()) {
                     throw new GeneralErrorException(HttpStatus.BAD_REQUEST.value(), translate(""));
                 }
                 final OffsetDateTime startDate = new SimpleDateFormat("yyyy-MM-dd")
-                    .parse(from)
+                    .parse(fromDate)
                     .toInstant()
                     .atOffset(ZoneOffset.UTC);
 
                 final OffsetDateTime endDate = new SimpleDateFormat("yyyy-MM-dd")
-                    .parse(to)
+                    .parse(toDate)
                     .toInstant()
                     .atOffset(ZoneOffset.UTC);
 
