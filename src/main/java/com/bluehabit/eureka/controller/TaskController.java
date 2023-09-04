@@ -74,7 +74,7 @@ public class TaskController {
         produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<BaseResponse<List<Task>>> searchTask(
-        @Param("query") String query
+        @RequestParam("query") String query
     ) {
         return taskService.searchTask(query);
     }
